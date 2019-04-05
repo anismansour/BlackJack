@@ -1,4 +1,3 @@
-console.log("running");
 const cards = [
   //spades
   { name: "spadeOne ", value1: 1, value2: 11, picture: "" },
@@ -62,20 +61,39 @@ const cards = [
 ];
 
 class Player {
-  constructor(name, cardInHand, valueOfcards, wallet) {
+  constructor(name, cardsInHand, valueOfcards, wallet) {
     this.name = name;
-    this.cardInHand = cardInHand;
+    this.cardsInHand = cardsInHand;
     this.valueOfcards = valueOfcards;
     this.wallet = wallet;
   }
 }
 
-const dealer = [
-  {
-    cardsInhand: [],
-    cardsValue: 0
+class TheDealer {
+  constructor(cardsInHand, valueOfcards) {
+    this.cardsInHand = cardsInHand;
+    this.valueOfcards = valueOfcards;
   }
-];
+}
+
+let dealer;
+let player1;
+let initPlayer = () => {
+  // initiate dealer and player
+  var namePlayer1 = prompt("Let's start !! whats your name");
+  var bank = prompt("how much money you want");
+  player1 = new Player();
+  player1.name = namePlayer1;
+  player1.wallet = bank;
+  player1.valueOfcards = 0;
+  player1.cardsInHand = [];
+  dealer = new TheDealer();
+  dealer.cardsInHand = [];
+  dealer.valueOfcards = 0;
+};
+initPlayer();
+//console.log("the palyer1 is  ");
+//console.log(player1);
 
 //function to shuffle the cards
 let shuffle = [];
@@ -87,5 +105,68 @@ const shuffleCards = () => {
     cards.splice(random, 1);
   }
 };
-//shuffleCards();
-console.log(cards[2]);
+shuffleCards();
+
+//  function to bets
+
+let bet = 0;
+const bets = () => {
+  bet = prompt("enter amount that you want to bet ");
+  if (+bet > +player1.wallet) {
+    //check the amount entered with the wallet of the player
+    console.log("no enought money");
+    bet = 0;
+  } else {
+    console.log("ready to play");
+  }
+};
+
+bets();
+
+console.log("the bet will be  " + bet);
+
+console.log("the amount of the walllet is " + player1.wallet);
+
+//function to deal the cards from the shuffled cards
+const firstDeal = () => {
+  //while cards are not 2 on each hand
+  while (dealer.cardsInHand.length < 2 || player1.cardsInHand.length < 2) {
+    player1.cardsInHand.push(shuffle[0]);
+    shuffle.splice(0, 1);
+    dealer.cardsInHand.push(shuffle[0]);
+    shuffle.splice(0, 1);
+  }
+};
+firstDeal();
+
+// console.log("the player one !!!!");
+// console.log(player1);
+// console.log("the DEALER !!!!");
+// console.log(dealer);
+
+console.log("the name of the card is ");
+console.log(player1.cardsInHand[0].value);
+
+const checkPlayerValue = () => {
+  for (let i = 0; i < player1.cardsInHand.length; i++) {
+    if (
+      player1.cardsInHand[i].name === "spadeOne" ||
+      player1.cardsInHand[i].name === "heartOne" ||
+      player1.cardsInHand[i].name === "clubOne" ||
+      player1.cardsInHand[i].name === "diamondOne"
+    ) {
+      let ace = confirm("do you want to use  ace as 11!");
+      if (ace === true) {
+        player1.valueOfcards += 11;
+      } else {
+        player1.valueOfcards += 1;
+      }
+    } else {
+      //else for card is not an ace
+      player1.valueOfcards =
+        player1.valueOfcards + player1.cardsInHand[i].value;
+    }
+  }
+};
+checkPlayerValue();
+console.log("the value of the cards are   " + player1.valueOfcards);
