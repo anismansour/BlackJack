@@ -6,7 +6,24 @@
     <title>BlackJack</title>
   </head>
   <body>
-    <div class="card diamonds J"></div>
+    <section class="dealerHand">
+      <div id="dealerCard1" class="card back-blue"></div>
+      <div id="dealerCard2" class="card back-blue"></div>
+    </section>
+    <h1>BlackJack</h1>
+    <section class="playerHand">
+      <div id="playerCard1" class="card back-blue"></div>
+      <div id="playerCard2" class="card back-blue"></div>
+    </section>
+
+    <input id="buttonHit" type="button" style="visibility:hidden" value="HIT" />
+    <input
+      id="buttonStand"
+      type="button"
+      style="visibility:hidden"
+      value="STAND"
+    />
+
     <script src="js/app.js"></script>
   </body>
 </html>
