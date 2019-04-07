@@ -6,16 +6,46 @@
 body {
   background: url(blackJack-table.jpg) no-repeat center center fixed;
   background-size: cover;
+  background-position: center top;
 
-  /* height: 100vh; */
+  /* text-align: center; */
 }
 .dealerHand {
-  margin-left: auto;
-  margin-right: auto;
+  text-align: center;
+  margin-top: 100px;
+  margin-bottom: 0px;
 }
-#buttonHit {
-  align-items: center;
+.playerHand {
+  text-align: center;
 }
+
 h1 {
+  text-align: center;
+  margin-top: 0px;
+}
+
+img {
+  width: 15%;
+  height: 15%;
+
+  object-fit: contain;
+}
+img:hover {
+  background-color: red;
+}
+/* .walletId {
+  background-color: black;
+  color: red;
+  width: 100px;
+  height: 50px;
+} */
+input {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  background-color: black;
+  color: red;
+  width: 100px;
+  height: 50px;
+  font-weight: 700;
+  font-size: 20px;
   text-align: center;
 }

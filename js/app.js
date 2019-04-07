@@ -80,7 +80,9 @@ let dealer;
 let player1;
 const TheGame = () => {
   let namePlayer1 = prompt("Let's start !! whats your name");
-  let bank = Number(prompt("how much money you want"));
+  let bank = 2500;
+  document.getElementById("walletId").value = bank;
+  // let bank = Number(prompt("how much money you want"));
   let bet = Number(prompt("enter amount that you want to bet"));
   const initPlayer = () => {
     // initiate dealer and player
