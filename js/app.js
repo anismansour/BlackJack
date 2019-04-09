@@ -161,24 +161,30 @@ const playRounds = () => {
       document.getElementById("walletId").value = bank;
       return alert("equal");
     } else if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
-      console.log("player won with Blackjack");
+      console.log("player won with Blackjack 164");
       bank = bank + bet * 1.5;
       bet = 0;
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
-      return alert("player won");
-    } else if (player1.valueOfcards > dealer.valueOfcards) {
+      return alert("player won 169");
+    } else if (
+      player1.valueOfcards > dealer.valueOfcards &&
+      dealer.valueOfcards < 21
+    ) {
       bank = bank + bet * 1.5;
       bet = 0;
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
-      return alert("player won");
-    } else if (player1.valueOfcards < dealer.valueOfcards) {
+      return alert("player won 175");
+    } else if (
+      player1.valueOfcards < dealer.valueOfcards &&
+      dealer.valueOfcards < 21
+    ) {
       bank = bank - bet;
       bet = 0;
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
-      return alert("player lost");
+      return alert("player lost 181");
     }
   };
 
@@ -193,28 +199,28 @@ const playRounds = () => {
       bet = 0;
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
-      alert("player lost");
+      alert("player lost 196");
       return;
-    } else if (dealer.valueOfcards >= 17) {
+    } else if (dealer.valueOfcards >= 17 && dealer.valueOfcards < 21) {
       if (dealer.valueOfcards > player1.valueOfcards) {
         bet = 0;
         document.getElementById("Bets").value = bet;
         document.getElementById("walletId").value = bank;
-        alert("player lost");
+        alert("player lost 203");
         return;
       } else if (player1.valueOfcards > dealer.valueOfcards) {
         bank = bank + bet * 1.5;
         bet = 0;
         document.getElementById("Bets").value = bet;
         document.getElementById("walletId").value = bank;
-        alert("player won");
+        alert("player won 210");
         return;
       } else if (player1.valueOfcards === dealer.valueOfcards) {
         bank = bank + bet;
         bet = 0;
         document.getElementById("Bets").value = bet;
         document.getElementById("walletId").value = bank;
-        alert("equal");
+        alert("equal 217");
         return;
       }
     } else {
@@ -250,10 +256,6 @@ const playRounds = () => {
   };
 
   bets();
-  //console.log("the bet amount before game " + bet);
-  //console.log("the bank amount before game " + bank);
-  //function to deal the cards from the shuffled cards
-
   const firstDeal = () => {
     //while cards are not 2 on each hand
     while (dealer.cardsInHand.length < 2 || player1.cardsInHand.length < 2) {
@@ -303,7 +305,7 @@ const playRounds = () => {
       bet = 0;
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
-      alert("player lost");
+      alert("player lost 306");
       return;
     }
   };
@@ -351,6 +353,23 @@ const playRounds = () => {
     }
   };
 
+  const checkAcePlayer = () => {
+    // if the total is more than 21 we check if there is an ace. is yes we change it to 1.
+    for (let i = 0; i < player1.cardsInHand.length; i++) {
+      if (
+        player1.cardsInHand[i].name === "spadeOne" ||
+        player1.cardsInHand[i].name === "heartOne" ||
+        player1.cardsInHand[i].name === "clubOne" ||
+        player1.cardsInHand[i].name === "diamondOne"
+      ) {
+        player1.valueOfcards -= 10;
+        if (player1.valueOfcards < 21) {
+          return;
+        }
+      }
+    }
+  };
+
   //If the dealer has an ace, and counting it as 11 would bring his total to 17 or more (but not over 21),
   //he must count the ace as 11 and stand. The dealer's decisions, then, are automatic on all plays,
   //whereas the player always has the option of taking one or more cards.
@@ -360,8 +379,8 @@ const playRounds = () => {
       player1.valueOfcards =
         player1.valueOfcards + player1.cardsInHand[i].value;
     }
-    if (dealer.valueOfcards > 21) {
-      checkAce();
+    if (player1.valueOfcards > 21) {
+      checkAcePlayer();
     }
 
     hideButtons();
