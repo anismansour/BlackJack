@@ -78,12 +78,44 @@ class TheDealer {
 
 let dealer;
 let player1;
+
+let bet = 0;
+let bank = 2500;
 const TheGame = () => {
   let namePlayer1 = prompt("Let's start !! whats your name");
-  let bank = 2500;
-  document.getElementById("walletId").value = bank;
-  // let bank = Number(prompt("how much money you want"));
-  let bet = Number(prompt("enter amount that you want to bet"));
+
+  const bet50 = () => {
+    if (bank - 50 >= 0) {
+      bet += 50;
+      bank -= 50;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+    } else {
+      return;
+    }
+  };
+  const bet100 = () => {
+    if (bank - 100 >= 0) {
+      bet += 100;
+      bank -= 100;
+
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+    } else {
+      return;
+    }
+  };
+  const bet500 = () => {
+    if (bank - 500 >= 0) {
+      bet += 500;
+      bank -= 500;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+    } else {
+      return;
+    }
+  };
+
   const initPlayer = () => {
     // initiate dealer and player
 
@@ -97,13 +129,22 @@ const TheGame = () => {
     dealer.valueOfcards = 0;
   };
   initPlayer();
+  document.getElementById("walletId").value = bank;
+  document.getElementById("buttonChip50").addEventListener("click", bet50);
+  document.getElementById("buttonChip100").addEventListener("click", bet100);
+  document.getElementById("buttonChip500").addEventListener("click", bet500);
+};
+document.getElementById("startGame").addEventListener("click", TheGame);
+var dealerHand = document.querySelector(".dealerHand");
 
+const playRounds = () => {
   const dealerHit = () => {
     document.getElementById("dealerCard2").className =
       dealer.cardsInHand[1].picture;
     while (dealer.valueOfcards < 17) {
-      var div = document.body.appendChild(document.createElement("div"));
+      var div = document.createElement("div");
       div.className = shuffle[0].picture;
+      dealerHand.appendChild(div);
       dealer.cardsInHand.push(shuffle[0]);
       shuffle.splice(0, 1);
       dealer.valueOfcards = 0;
@@ -112,12 +153,14 @@ const TheGame = () => {
   };
 
   //button hit function
+  var playerHand = document.querySelector(".playerHand");
   function playerHit() {
     //
-    var div = document.body.appendChild(document.createElement("div"));
+    var div = document.createElement("div");
     //
     player1.cardsInHand.push(shuffle[0]);
     div.className = shuffle[0].picture;
+    playerHand.appendChild(div);
     shuffle.splice(0, 1);
     player1.valueOfcards = 0;
     checkPlayerValue();
@@ -131,27 +174,67 @@ const TheGame = () => {
       dealer.valueOfcards < 17 &&
       dealer.valueOfcards > player1.valueOfcards
     ) {
-      return alert("dealer won");
-    }
-    if (dealer.valueOfcards >= 17) {
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      alert("player lost");
+      return;
+    } else if (dealer.valueOfcards >= 17) {
       if (dealer.valueOfcards > player1.valueOfcards) {
-        return alert("the dealer Won inside the stand button " + bank);
-      }
-      if (player1.valueOfcards > dealer.valueOfcards) {
+        bet = 0;
+        document.getElementById("Bets").value = bet;
+        document.getElementById("walletId").value = bank;
+        alert("player lost");
+        return;
+      } else if (player1.valueOfcards > dealer.valueOfcards) {
         bank = bank + bet * 1.5;
-        alert("the Player won inside the stand button  " + bank);
-      }
-      if (player1.valueOfcards === dealer.valueOfcards) {
+        bet = 0;
+        document.getElementById("Bets").value = bet;
+        document.getElementById("walletId").value = bank;
+        alert("player won");
+        return;
+      } else if (player1.valueOfcards === dealer.valueOfcards) {
         bank = bank + bet;
-        alert(" no winner  " + bank);
+        bet = 0;
+        document.getElementById("Bets").value = bet;
+        document.getElementById("walletId").value = bank;
+        alert("equal");
+        return;
       }
     } else {
       dealerHit();
     }
   }
 
-  //console.log("the palyer1 is  ");
-  //console.log(player1);
+  // const checkWin = () => {
+  //   if (player1.valueOfcards === 21 && dealer.valueOfcards === 21) {
+  //     console.log("both won, both have a black jack");
+  //     bank = bank + bet;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("equal");
+  //   } else if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
+  //     console.log("player won with Blackjack");
+  //     bank = bank + bet * 1.5;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("player won");
+  //   } else if (player1.valueOfcards > dealer.valueOfcards) {
+  //     bank = bank + bet * 1.5;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("player won");
+  //   } else if (player1.valueOfcards < dealer.valueOfcards) {
+  //     bank = bank - bet;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("player lost");
+  //   }
+  // };
 
   //function to shuffle the cards
   let shuffle = [];
@@ -183,6 +266,7 @@ const TheGame = () => {
   //console.log("the bet amount before game " + bet);
   //console.log("the bank amount before game " + bank);
   //function to deal the cards from the shuffled cards
+
   const firstDeal = () => {
     //while cards are not 2 on each hand
     while (dealer.cardsInHand.length < 2 || player1.cardsInHand.length < 2) {
@@ -203,6 +287,7 @@ const TheGame = () => {
       //   player1.cardsInHand[1] = { name: "spadeJack", value: 10, picture: "" };
     }
   };
+  //document.getElementById("playGame").addEventListener("click", firstDeal);
   firstDeal();
 
   document.getElementById("dealerCard1").className =
@@ -217,6 +302,8 @@ const TheGame = () => {
       document.getElementById("buttonHit").style.visibility = "visible";
       document.getElementById("buttonStand").style.visibility = "visible";
     } else {
+      document.getElementById("dealerCard2").className =
+        dealer.cardsInHand[1].picture;
       document.getElementById("buttonHit").style.visibility = "hidden";
       document.getElementById("buttonStand").style.visibility = "hidden";
     }
@@ -224,38 +311,41 @@ const TheGame = () => {
 
   const checkPlayerLoss = () => {
     if (dealer.valueOfcards > 21) {
-      return alert("Player lost");
+      document.getElementById("dealerCard2").className =
+        dealer.cardsInHand[1].picture;
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      alert("player lost");
+      return;
     }
   };
-  const checkPlayerValue = () => {
-    for (let i = 0; i < player1.cardsInHand.length; i++) {
-      if (
-        player1.cardsInHand[i].name === "spadeOne" ||
-        player1.cardsInHand[i].name === "heartOne" ||
-        player1.cardsInHand[i].name === "clubOne" ||
-        player1.cardsInHand[i].name === "diamondOne"
-      ) {
-        console.log("got an ace");
-        let ace = confirm("do you want to use  ace as 11!");
-        if (ace === true) {
-          player1.valueOfcards += 11;
-        } else {
-          player1.valueOfcards += 1;
-        }
-      } else {
-        //else for card is not an ace
-        player1.valueOfcards =
-          player1.valueOfcards + player1.cardsInHand[i].value;
-      }
-    }
-    hideButtons();
-    checkPlayerLoss();
-  };
-  checkPlayerValue();
 
-  //If the dealer has an ace, and counting it as 11 would bring his total to 17 or more (but not over 21),
-  //he must count the ace as 11 and stand. The dealer's decisions, then, are automatic on all plays,
-  //whereas the player always has the option of taking one or more cards.
+  // const checkPlayerValue = () => {
+  //   for (let i = 0; i < player1.cardsInHand.length; i++) {
+  //     if (
+  //       player1.cardsInHand[i].name === "spadeOne" ||
+  //       player1.cardsInHand[i].name === "heartOne" ||
+  //       player1.cardsInHand[i].name === "clubOne" ||
+  //       player1.cardsInHand[i].name === "diamondOne"
+  //     ) {
+  //       console.log("got an ace");
+  //       let ace = confirm("do you want to use  ace as 11!");
+  //       if (ace === true) {
+  //         player1.valueOfcards += 11;
+  //       } else {
+  //         player1.valueOfcards += 1;
+  //       }
+  //     } else {
+  //       //else for card is not an ace
+  //       player1.valueOfcards =
+  //         player1.valueOfcards + player1.cardsInHand[i].value;
+  //     }
+  //   }
+  //   hideButtons();
+  //   checkPlayerLoss();
+  // };
+  // checkPlayerValue();
 
   const checkAce = () => {
     // if the total is more than 21 we check if there is an ace. is yes we change it to 1.
@@ -274,6 +364,26 @@ const TheGame = () => {
     }
   };
 
+  //If the dealer has an ace, and counting it as 11 would bring his total to 17 or more (but not over 21),
+  //he must count the ace as 11 and stand. The dealer's decisions, then, are automatic on all plays,
+  //whereas the player always has the option of taking one or more cards.
+  // test player ace !!!
+  const checkPlayerValue = () => {
+    for (let i = 0; i < player1.cardsInHand.length; i++) {
+      player1.valueOfcards =
+        player1.valueOfcards + player1.cardsInHand[i].value;
+
+      if (dealer.valueOfcards > 21) {
+        checkAce();
+      }
+    }
+    hideButtons();
+    checkPlayerLoss();
+  };
+  checkPlayerValue();
+
+  // test player ace !!!
+
   const checkDealerValue = () => {
     //ACES WILL TAKE A VALUE OF 11 until we check with the ace function
     for (let i = 0; i < dealer.cardsInHand.length; i++) {
@@ -289,12 +399,19 @@ const TheGame = () => {
     if (player1.valueOfcards === 21 && dealer.valueOfcards === 21) {
       console.log("both won, both have a black jack");
       bank = bank + bet;
-      return bank;
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      alert("equal");
+      return;
     }
     if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
-      console.log("player won with Blackjack");
       bank = bank + bet * 1.5;
-      return bank;
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      alert("player won");
+      return;
     }
 
     checkFirstGame();
@@ -304,8 +421,8 @@ const TheGame = () => {
   };
   document.getElementById("buttonHit").addEventListener("click", playerHit);
   document.getElementById("buttonStand").addEventListener("click", standCard);
-
   console.log(player1);
   console.log(dealer);
 };
-TheGame();
+
+document.getElementById("playGame").addEventListener("click", playRounds);

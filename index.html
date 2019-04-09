@@ -6,7 +6,14 @@
     <title>BlackJack</title>
   </head>
   <body>
+    <div>
+      <input id="startGame" type="button" value="Start new game" />
+
+      <input id="playGame" type="button" value="Play" />
+    </div>
     <input id="walletId" type="text" value="" />
+    <input id="Bets" type="text" value="" />
+
     <section class="dealerHand">
       <div id="dealerCard1" class="card back-blue"></div>
       <div id="dealerCard2" class="card back-blue"></div>
@@ -16,17 +23,25 @@
       <div id="playerCard1" class="card back-blue"></div>
       <div id="playerCard2" class="card back-blue"></div>
     </section>
-    <div id="chip1"><img src="100chip.png" /></div>
-    <div id="chip2"><img src="50chip.png" /></div>
-    <div id="chip3"><img src="500chip.png" /></div>
-
-    <input id="buttonHit" type="button" style="visibility:hidden" value="HIT" />
-    <input
-      id="buttonStand"
-      type="button"
-      style="visibility:hidden"
-      value="STAND"
-    />
+    <div class="buttons">
+      <input
+        id="buttonHit"
+        type="button"
+        style="visibility:hidden"
+        value="HIT"
+      />
+      <input
+        id="buttonStand"
+        type="button"
+        style="visibility:hidden"
+        value="STAND"
+      />
+    </div>
+    <div class="chip-section">
+      <div class="chip" id="buttonChip50"><img src="50chip.png" /></div>
+      <div class="chip" id="buttonChip100"><img src="100chip.png" /></div>
+      <div class="chip" id="buttonChip500"><img src="500chip.png" /></div>
+    </div>
 
     <script src="js/app.js"></script>
   </body>
