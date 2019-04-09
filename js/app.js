@@ -152,19 +152,35 @@ const playRounds = () => {
     }
   };
 
-  //button hit function
-  var playerHand = document.querySelector(".playerHand");
-  function playerHit() {
-    //
-    var div = document.createElement("div");
-    //
-    player1.cardsInHand.push(shuffle[0]);
-    div.className = shuffle[0].picture;
-    playerHand.appendChild(div);
-    shuffle.splice(0, 1);
-    player1.valueOfcards = 0;
-    checkPlayerValue();
-  }
+  const checkWin = () => {
+    if (player1.valueOfcards === 21 && dealer.valueOfcards === 21) {
+      console.log("both won, both have a black jack");
+      bank = bank + bet;
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      return alert("equal");
+    } else if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
+      console.log("player won with Blackjack");
+      bank = bank + bet * 1.5;
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      return alert("player won");
+    } else if (player1.valueOfcards > dealer.valueOfcards) {
+      bank = bank + bet * 1.5;
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      return alert("player won");
+    } else if (player1.valueOfcards < dealer.valueOfcards) {
+      bank = bank - bet;
+      bet = 0;
+      document.getElementById("Bets").value = bet;
+      document.getElementById("walletId").value = bank;
+      return alert("player lost");
+    }
+  };
 
   //button stand function
   function standCard() {
@@ -203,38 +219,9 @@ const playRounds = () => {
       }
     } else {
       dealerHit();
+      checkWin();
     }
   }
-
-  // const checkWin = () => {
-  //   if (player1.valueOfcards === 21 && dealer.valueOfcards === 21) {
-  //     console.log("both won, both have a black jack");
-  //     bank = bank + bet;
-  //     bet = 0;
-  //     document.getElementById("Bets").value = bet;
-  //     document.getElementById("walletId").value = bank;
-  //     return alert("equal");
-  //   } else if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
-  //     console.log("player won with Blackjack");
-  //     bank = bank + bet * 1.5;
-  //     bet = 0;
-  //     document.getElementById("Bets").value = bet;
-  //     document.getElementById("walletId").value = bank;
-  //     return alert("player won");
-  //   } else if (player1.valueOfcards > dealer.valueOfcards) {
-  //     bank = bank + bet * 1.5;
-  //     bet = 0;
-  //     document.getElementById("Bets").value = bet;
-  //     document.getElementById("walletId").value = bank;
-  //     return alert("player won");
-  //   } else if (player1.valueOfcards < dealer.valueOfcards) {
-  //     bank = bank - bet;
-  //     bet = 0;
-  //     document.getElementById("Bets").value = bet;
-  //     document.getElementById("walletId").value = bank;
-  //     return alert("player lost");
-  //   }
-  // };
 
   //function to shuffle the cards
   let shuffle = [];
@@ -372,11 +359,11 @@ const playRounds = () => {
     for (let i = 0; i < player1.cardsInHand.length; i++) {
       player1.valueOfcards =
         player1.valueOfcards + player1.cardsInHand[i].value;
-
-      if (dealer.valueOfcards > 21) {
-        checkAce();
-      }
     }
+    if (dealer.valueOfcards > 21) {
+      checkAce();
+    }
+
     hideButtons();
     checkPlayerLoss();
   };
@@ -394,6 +381,20 @@ const playRounds = () => {
     }
   };
   checkDealerValue();
+
+  //button hit function
+  var playerHand = document.querySelector(".playerHand");
+  function playerHit() {
+    //
+    var div = document.createElement("div");
+    //
+    player1.cardsInHand.push(shuffle[0]);
+    div.className = shuffle[0].picture;
+    playerHand.appendChild(div);
+    shuffle.splice(0, 1);
+    player1.valueOfcards = 0;
+    checkPlayerValue();
+  }
 
   const checkFirstGame = () => {
     if (player1.valueOfcards === 21 && dealer.valueOfcards === 21) {
