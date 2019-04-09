@@ -76,6 +76,35 @@ class TheDealer {
   }
 }
 
+const checkWinner = () => {
+  if (resultPlayer > resultDealer && resultPlayer <= 21) {
+    //alert("player won");
+    document.getElementById("result").innerText = "Player won";
+    document.getElementById("Bets").value = 0;
+    bank = bank + bet * 1.5;
+    document.getElementById("walletId").value = bank;
+    bet = 0;
+  }
+  if (resultDealer > resultPlayer && resultDealer <= 21) {
+    //alert("dealer won");
+    document.getElementById("result").innerText = "Dealer won";
+    document.getElementById("Bets").value = 0;
+
+    document.getElementById("walletId").value = bank;
+    bet = 0;
+  }
+  if (resultDealer === resultPlayer) {
+    document.getElementById("result").innerText = "No winner";
+    document.getElementById("Bets").value = 0;
+    bank += bet;
+    document.getElementById("walletId").value = bank;
+    bet = 0;
+    //alert("equal");
+  }
+};
+
+let resultPlayer = 0;
+let resultDealer = 0;
 let dealer;
 let player1;
 
@@ -109,6 +138,7 @@ const TheGame = () => {
     if (bank - 500 >= 0) {
       bet += 500;
       bank -= 500;
+      console.log(bank, bet);
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
     } else {
@@ -149,83 +179,108 @@ const playRounds = () => {
       shuffle.splice(0, 1);
       dealer.valueOfcards = 0;
       checkDealerValue();
+      if (dealer.valueOfcards > 21) {
+        //alert("dealer busted ");
+        document.getElementById("result").innerText =
+          "Dealer Busted, Player won";
+        document.getElementById("Bets").value = 0;
+        bank = bank + bet * 1.5;
+        document.getElementById("walletId").value = bank;
+        bet = 0;
+
+        return;
+      }
     }
+    checkWinner();
   };
 
-  const checkWin = () => {
-    if (player1.valueOfcards === 21 && dealer.valueOfcards === 21) {
-      console.log("both won, both have a black jack");
-      bank = bank + bet;
-      bet = 0;
-      document.getElementById("Bets").value = bet;
-      document.getElementById("walletId").value = bank;
-      return alert("equal");
-    } else if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
-      console.log("player won with Blackjack 164");
-      bank = bank + bet * 1.5;
-      bet = 0;
-      document.getElementById("Bets").value = bet;
-      document.getElementById("walletId").value = bank;
-      return alert("player won 169");
-    } else if (
-      player1.valueOfcards > dealer.valueOfcards &&
-      dealer.valueOfcards < 21
-    ) {
-      bank = bank + bet * 1.5;
-      bet = 0;
-      document.getElementById("Bets").value = bet;
-      document.getElementById("walletId").value = bank;
-      return alert("player won 175");
-    } else if (
-      player1.valueOfcards < dealer.valueOfcards &&
-      dealer.valueOfcards < 21
-    ) {
-      bank = bank - bet;
-      bet = 0;
-      document.getElementById("Bets").value = bet;
-      document.getElementById("walletId").value = bank;
-      return alert("player lost 181");
-    }
-  };
+  // const checkWin = () => {
+  //   if (player1.valueOfcards === 21 && dealer.valueOfcards === 21) {
+  //     console.log("both won, both have a black jack");
+  //     bank = bank + bet;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("equal");
+  //   } else if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
+  //     console.log("player won with Blackjack 164");
+  //     bank = bank + bet * 1.5;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("player won 169");
+  //   } else if (
+  //     player1.valueOfcards > dealer.valueOfcards &&
+  //     dealer.valueOfcards < 21
+  //   ) {
+  //     bank = bank + bet * 1.5;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("player won 175");
+  //   } else if (
+  //     player1.valueOfcards < dealer.valueOfcards &&
+  //     dealer.valueOfcards < 21
+  //   ) {
+  //     bank = bank - bet;
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     return alert("player lost 181");
+  //   }
+  // };
+
+  ////copy of orginal standcard()//
+  // function standCard() {
+  //   document.getElementById("dealerCard2").className =
+  //     dealer.cardsInHand[1].picture;
+  //   if (
+  //     dealer.valueOfcards < 17 &&
+  //     dealer.valueOfcards > player1.valueOfcards
+  //   ) {
+  //     bet = 0;
+  //     document.getElementById("Bets").value = bet;
+  //     document.getElementById("walletId").value = bank;
+  //     alert("player lost 196");
+  //     return;
+  //   } else if (dealer.valueOfcards >= 17 && dealer.valueOfcards < 21) {
+  //     if (dealer.valueOfcards > player1.valueOfcards) {
+  //       bet = 0;
+  //       document.getElementById("Bets").value = bet;
+  //       document.getElementById("walletId").value = bank;
+  //       alert("player lost 203");
+  //       return;
+  //     } else if (player1.valueOfcards > dealer.valueOfcards) {
+  //       bank = bank + bet * 1.5;
+  //       bet = 0;
+  //       document.getElementById("Bets").value = bet;
+  //       document.getElementById("walletId").value = bank;
+  //       alert("player won 210");
+  //       return;
+  //     } else if (player1.valueOfcards === dealer.valueOfcards) {
+  //       bank = bank + bet;
+  //       bet = 0;
+  //       document.getElementById("Bets").value = bet;
+  //       document.getElementById("walletId").value = bank;
+  //       alert("equal 217");
+  //       return;
+  //     }
+  //   } else {
+  //     dealerHit();
+  //     checkWin();
+  //   }
+  // }
+  ////////////
 
   //button stand function
   function standCard() {
     document.getElementById("dealerCard2").className =
       dealer.cardsInHand[1].picture;
-    if (
-      dealer.valueOfcards < 17 &&
-      dealer.valueOfcards > player1.valueOfcards
-    ) {
-      bet = 0;
-      document.getElementById("Bets").value = bet;
-      document.getElementById("walletId").value = bank;
-      alert("player lost 196");
-      return;
-    } else if (dealer.valueOfcards >= 17 && dealer.valueOfcards < 21) {
-      if (dealer.valueOfcards > player1.valueOfcards) {
-        bet = 0;
-        document.getElementById("Bets").value = bet;
-        document.getElementById("walletId").value = bank;
-        alert("player lost 203");
-        return;
-      } else if (player1.valueOfcards > dealer.valueOfcards) {
-        bank = bank + bet * 1.5;
-        bet = 0;
-        document.getElementById("Bets").value = bet;
-        document.getElementById("walletId").value = bank;
-        alert("player won 210");
-        return;
-      } else if (player1.valueOfcards === dealer.valueOfcards) {
-        bank = bank + bet;
-        bet = 0;
-        document.getElementById("Bets").value = bet;
-        document.getElementById("walletId").value = bank;
-        alert("equal 217");
-        return;
-      }
-    } else {
+    if (dealer.valueOfcards < 17) {
       dealerHit();
-      checkWin();
+      // checkWin();
+    } else {
+      checkWinner();
     }
   }
 
@@ -243,19 +298,20 @@ const playRounds = () => {
 
   //  function to bets
 
-  const bets = () => {
-    //bet = prompt("enter amount that you want to bet"); //promp box will give string  => need to change it to number
-    if (bet > player1.wallet) {
-      //check the amount entered with the wallet of the player
-      console.log("no enought money");
-      bet = 0;
-    } else {
-      console.log("ready to play");
-      bank = bank - bet;
-    }
-  };
+  // const bets = () => {
+  //   //bet = prompt("enter amount that you want to bet"); //promp box will give string  => need to change it to number
+  //   if (bet > player1.wallet) {
+  //     //check the amount entered with the wallet of the player
+  //     console.log("no enought money");
+  //     bet = 0;
+  //   } else {
+  //     console.log("ready to play");
+  //     bank = bank - bet;
+  //     console.log(bank);
+  //   }
+  // };
 
-  bets();
+  //bets();
   const firstDeal = () => {
     //while cards are not 2 on each hand
     while (dealer.cardsInHand.length < 2 || player1.cardsInHand.length < 2) {
@@ -385,6 +441,8 @@ const playRounds = () => {
 
     hideButtons();
     checkPlayerLoss();
+    resultPlayer = player1.valueOfcards;
+    //console.log("at end of checkplayervalue " + player1.valueOfcards);
   };
   checkPlayerValue();
 
@@ -398,6 +456,9 @@ const playRounds = () => {
     if (dealer.valueOfcards > 21) {
       checkAce();
     }
+
+    //console.log("at end of checkDealer value " + dealer.valueOfcards);
+    resultDealer = dealer.valueOfcards;
   };
   checkDealerValue();
 
@@ -413,6 +474,14 @@ const playRounds = () => {
     shuffle.splice(0, 1);
     player1.valueOfcards = 0;
     checkPlayerValue();
+    if (player1.valueOfcards > 21) {
+      //alert("player lost");
+      document.getElementById("result").innerText = "Player Busted";
+      document.getElementById("Bets").value = 0;
+      console.log(bet, bank);
+      document.getElementById("walletId").value = bank;
+      bet = 0;
+    }
   }
 
   const checkFirstGame = () => {
@@ -422,7 +491,9 @@ const playRounds = () => {
       bet = 0;
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
-      alert("equal");
+      //alert("equal");
+      document.getElementById("result").innerText = "No winner";
+
       return;
     }
     if (player1.valueOfcards === 21 && dealer.valueOfcards < 21) {
@@ -430,7 +501,9 @@ const playRounds = () => {
       bet = 0;
       document.getElementById("Bets").value = bet;
       document.getElementById("walletId").value = bank;
-      alert("player won");
+      //alert("player won");
+      document.getElementById("result").innerText = "Player won";
+
       return;
     }
 
@@ -441,8 +514,8 @@ const playRounds = () => {
   };
   document.getElementById("buttonHit").addEventListener("click", playerHit);
   document.getElementById("buttonStand").addEventListener("click", standCard);
-  console.log(player1);
-  console.log(dealer);
+  // console.log(player1);
+  // console.log(dealer);
 };
 
 document.getElementById("playGame").addEventListener("click", playRounds);

@@ -297,3 +297,10 @@ img {
 .buttons {
   float: right;
 }
+
+#result {
+  font-family: fantasy;
+  color: red;
+  font: 800;
+  margin: 0px;
+}
